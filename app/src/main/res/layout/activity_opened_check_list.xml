@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_note4"
+        android:id="@+id/checkListLayout"
+        tools:context=".Activities.OpenedCheckListActivity"
+>
+
+<EditText android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textAlignment="center"
+          android:textSize="16sp"
+          android:maxLength="30"
+          android:singleLine="true"
+          android:id="@+id/listName"
+/>
+
+    <android.support.v4.widget.NestedScrollView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="false"
+            android:layout_below="@id/listName"
+            android:layout_above="@id/Button-exit_checklist"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="15dp"
+            android:id="@+id/ChecklistScroll"
+    >
+        <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkListScrollLayout">
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+
+    <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:text="@string/add"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            android:id="@+id/Button-add_checkListItem"
+            android:background="@drawable/round_button"
+            android:layout_alignParentRight="true"
+            android:layout_margin="15dp"
+            android:layout_above="@id/Button_clear_checklist_items"
+            />
+
+    <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/animated_button_erase"
+            android:layout_alignParentEnd="true" android:layout_alignParentBottom="true" android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
+            android:id="@+id/Button_clear_checklist_items"/>
+
+    <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/animated_button_save"
+            android:textSize="20sp"
+            android:id="@+id/Button-exit_checklist"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="14dp"
+            android:layout_marginLeft="15dp"
+            />
+
+    <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/animated_button_refresh"
+            android:id="@+id/Button-reset-checkboxes"
+            android:layout_centerInParent="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="14dp"
+
+    />
+</RelativeLayout>

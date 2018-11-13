@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id = "@+id/OpenedTicketLayout"
+        tools:context=".Activities.OpenTicketActivity">
+
+ <RelativeLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:id="@+id/TicketDataLayout"
+         android:visibility="invisible">
+
+ <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_centerHorizontal="true"
+         android:id="@+id/ticketNameText"
+ />
+
+  <ImageView
+          android:layout_height="30dp"
+          android:layout_width="30dp"
+          android:layout_marginLeft="30dp"
+          android:layout_marginTop="30dp"
+          android:background="@drawable/passanger"
+          android:id="@+id/passangerIcon"/>
+  <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="20dp"
+          android:layout_toRightOf="@id/passangerIcon"
+          android:layout_alignBottom="@id/passangerIcon"
+          android:id="@+id/passangerText"/>
+     <ImageView
+          android:layout_height="30dp"
+          android:layout_width="30dp"
+          android:layout_marginLeft="30dp"
+          android:layout_marginTop="30dp"
+          android:background="@drawable/icon"
+          android:layout_below="@id/passangerIcon"
+          android:id="@+id/dateIcon"/>
+  <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="20dp"
+          android:layout_toRightOf="@id/dateIcon"
+          android:layout_alignBottom="@id/dateIcon"
+          android:id="@+id/dateText"/>
+
+  <ImageView
+          android:layout_height="30dp"
+          android:layout_width="30dp"
+          android:layout_marginLeft="30dp"
+          android:layout_marginTop="30dp"
+          android:background="@drawable/clock"
+          android:layout_below="@id/dateIcon"
+          android:id="@+id/timeIcon"/>
+  <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="20dp"
+          android:layout_toRightOf="@id/timeIcon"
+          android:layout_alignBottom="@id/timeIcon"
+          android:id="@+id/timeText"/>
+  <ImageView
+          android:layout_height="30dp"
+          android:layout_width="30dp"
+          android:layout_marginLeft="30dp"
+          android:layout_marginTop="30dp"
+          android:background="@drawable/train"
+          android:layout_below="@id/timeIcon"
+          android:id="@+id/trainIcon"/>
+  <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginLeft="20dp"
+          android:layout_toRightOf="@id/trainIcon"
+          android:layout_alignBottom="@id/trainIcon"
+          android:id="@+id/trainText"/>
+     <ImageView
+             android:layout_height="30dp"
+             android:layout_width="30dp"
+             android:layout_marginLeft="30dp"
+             android:layout_marginTop="30dp"
+             android:background="@drawable/vagon"
+             android:layout_toRightOf="@id/trainText"
+             android:layout_alignBottom="@id/trainText"
+             android:id="@+id/carriageIcon"/>
+     <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_marginLeft="20dp"
+             android:layout_toRightOf="@id/carriageIcon"
+             android:layout_alignBottom="@id/carriageIcon"
+             android:id="@+id/carriageText"/>
+
+     <ImageView
+             android:layout_height="30dp"
+             android:layout_width="30dp"
+             android:layout_marginLeft="30dp"
+             android:layout_marginTop="30dp"
+             android:background="@drawable/seat"
+             android:layout_toRightOf="@id/carriageText"
+             android:layout_alignBottom="@id/carriageText"
+             android:id="@+id/seatIcon"/>
+     <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_marginLeft="20dp"
+             android:layout_toRightOf="@id/seatIcon"
+             android:layout_alignBottom="@id/seatIcon"
+             android:id="@+id/seatText"/>
+
+
+ </RelativeLayout>
+
+   <TextView
+
+           android:layout_height="25dp"
+           android:layout_width="250dp"
+           android:text="@string/Downloads"
+           android:layout_alignParentRight="true"
+           android:layout_alignParentBottom="false"
+           android:layout_centerVertical="true"
+           android:textAlignment="center"
+           android:layout_marginRight="5dp"
+           android:textColor="#FFFFFF"
+           android:background="#0095a8"
+           android:visibility="invisible"
+           android:id = "@+id/downloads_header"/>
+
+    <Button
+           android:layout_height="25dp"
+           android:layout_width="25dp"
+           android:layout_alignTop="@id/downloads_header"
+           android:layout_alignEnd="@id/downloads_header"
+           android:background="@drawable/baseline_clear_white_24"
+           android:id="@+id/Button_close_downloads"
+           android:visibility="invisible"/>
+
+    <ListView
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteY="8dp" tools:layout_editor_absoluteX="8dp"
+            android:layout_below="@id/downloads_header"
+            android:background="#26C6DA"
+            android:layout_marginRight="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="false"
+            android:layout_marginBottom="80dp"
+            android:id = "@+id/downloads_entry_list_view"
+            android:visibility="invisible"/>
+
+    <ImageView
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_below="@id/TicketDataLayout"
+            android:layout_above="@id/Button-exit_ticket"
+            android:layout_margin="10dp"
+            android:visibility="invisible"
+            android:id="@+id/TicketDisplay"
+    />
+
+    <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:text="@string/add"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            android:id="@+id/Button-add_ticket"
+            android:background="@drawable/round_button"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="15dp"
+            android:layout_above="@id/Button_clear_checklist_items"/>
+
+    <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/animated_button_erase"
+            android:layout_alignParentEnd="true" android:layout_alignParentBottom="true" android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
+            android:id="@+id/Button_clear_ticket"
+            android:visibility="invisible"/>
+
+    <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/animated_button_save"
+            android:textSize="20sp"
+            android:id="@+id/Button-exit_ticket"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="14dp"
+            android:layout_marginLeft="15dp"/>
+
+
+
+
+</RelativeLayout>

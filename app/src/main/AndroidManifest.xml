@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.example.vadim.notes">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application
+            android:allowBackup="true"
+            android:icon="@drawable/notes"
+            android:label="@string/app_name"
+            android:roundIcon="@drawable/notes"
+            android:supportsRtl="true"
+            android:theme="@style/AppTheme">
+        <activity android:name=".Activities.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
+        <activity
+                android:name=".Activities.OpenedNoteActivity"
+                android:label="@string/title_activity_opened_note">
+        </activity>
+        <activity
+                android:name=".Services.SplashActivity"
+                android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+                android:name=".Activities.OpenedCheckListActivity"
+                android:label="@string/title_activity_opened_check_list">
+        </activity>
+        <activity android:name=".Activities.OpenTicketActivity">
+        </activity>
+
+        <provider
+                android:name=".Services.GenericFileProvider"
+                android:authorities="${applicationId}.my.package.name.provider"
+                android:exported="false"
+                android:grantUriPermissions="true">
+        <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
+    </application>
+
+</manifest>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF"
+        tools:context=".Activities.MainActivity"
+        android:id="@+id/mainLayout">
+
+    <Button
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:text="@string/add"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            android:id="@+id/Button-save_note"
+            android:background="@drawable/round_button"
+            android:layout_alignParentEnd="true" android:layout_alignParentBottom="true" android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"/>
+    <Button
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:id="@+id/Button-exit-App"
+            android:background="@drawable/animated_button_exit"
+            android:layout_alignParentBottom="true"  android:layout_marginBottom="5dp" android:layout_marginLeft="15dp"
+            android:layout_marginTop="0dp"/>
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="70dp"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:id="@+id/notesScroll">
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/notesLayout">
+    </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

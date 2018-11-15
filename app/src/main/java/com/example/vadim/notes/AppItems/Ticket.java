@@ -1,10 +1,9 @@
 package com.example.vadim.notes.AppItems;
-import com.example.vadim.notes.R;
 
 import java.util.Map;
 import java.util.TreeMap;
 
-public class Ticket extends Note
+public class Ticket extends Note implements AppItem
 {
     private StringBuilder name;
     private StringBuilder trainData;
@@ -14,14 +13,9 @@ public class Ticket extends Note
     public Ticket(int noteId)
     {
         super(noteId);
-        icon.setImageResource(R.drawable.world);
-
-        savedNoteView.setWidth(500);
-        savedNoteView.setHeight(250);
-        savedNoteView.setTextSize(12);
-
         name = new StringBuilder();
         trainData = new StringBuilder();
+        this.itemType = "Ticket";
 
         keys = new String []{
                 "1:isInitilized",
@@ -130,4 +124,9 @@ public class Ticket extends Note
     }
 
     public Map<String, String> getTicketData() {return ticketData;}
+
+    @Override
+    public String getItemType() {
+        return itemType;
+    }
 }

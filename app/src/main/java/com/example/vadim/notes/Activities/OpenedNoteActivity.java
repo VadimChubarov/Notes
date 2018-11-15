@@ -25,7 +25,7 @@ public class OpenedNoteActivity extends Activity
         setContentView(R.layout.activity_opened_note);
         NotesManager.getInstance().setCurrentActivity(this);
 
-        currentNote = NotesManager.getInstance().getCurrentNote();
+        currentNote = (Note)NotesManager.getInstance().getCurrentNote();
         noteText = currentNote.getText();
 
         buildAllComponents();
@@ -48,7 +48,8 @@ public class OpenedNoteActivity extends Activity
     {
        noteText = noteTextView.getText().toString();
        currentNote.setText(noteText);
-       currentNote.getSavesNoteView().setText(currentNote.getTextPreview());
+       Button view = NotesManager.getInstance().getMainActivity().findViewById(currentNote.getViewId());
+       view.setText(currentNote.getTextPreview());
     }
 
     private void buildAllComponents()

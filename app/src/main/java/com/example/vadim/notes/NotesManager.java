@@ -1,12 +1,17 @@
 package com.example.vadim.notes;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import com.example.vadim.notes.Activities.MainActivity;
 import com.example.vadim.notes.Activities.OpenTicketActivity;
 import com.example.vadim.notes.Activities.OpenedCheckListActivity;
 import com.example.vadim.notes.Activities.OpenedNoteActivity;
+import com.example.vadim.notes.AppItems.AppItem;
 import com.example.vadim.notes.AppItems.CheckList;
 import com.example.vadim.notes.AppItems.Note;
 import com.example.vadim.notes.AppItems.Ticket;
@@ -21,15 +26,14 @@ public class NotesManager
     private Intent OpenNoteIntent;
     private Intent OpenCheckListIntent;
     private Intent OpenTicketIntent;
-    private Note currentNote;
+    private AppItem currentNote;
     private AppListener appListener;
 
     private static WeakReference<NotesManager> notesManagerWeakReference;
     private WeakReference<Activity> currentActivity = null;
     private WeakReference<MainActivity> mainActivity;
 
-    private Map<Integer, Note> NotesDatabase = new TreeMap<>();
-    private StringBuilder NotesForSave;
+    private Map<Integer, AppItem> NotesDatabase = new TreeMap<>();
     private static int noteId = 0;
 
     public NotesManager(MainActivity mainActivity)
@@ -48,7 +52,6 @@ public class NotesManager
         return notesManagerWeakReference.get();
     }
 
-
     public void clear()
     {
         notesManagerWeakReference.clear();
@@ -63,8 +66,7 @@ public class NotesManager
         Runtime.getRuntime().gc();
     }
 
-
-    public Note getCurrentNote() {return currentNote;}
+    public AppItem getCurrentNote() {return currentNote;}
 
     public MainActivity getMainActivity() {return mainActivity.get();}
 
@@ -89,7 +91,8 @@ public class NotesManager
     public AppListener getAppListener() {return appListener;}
 
 
-    public void createNewNote(String noteType) {
+    public void createNewNote(String noteType)
+    {
 
         Note note = null;
 
@@ -117,98 +120,66 @@ public class NotesManager
         }
     }
 
-    public String getNotesForSave() {
-        prepareNotesForSave();
-        return NotesForSave.toString();
-    }
+    public Map<Integer, AppItem> getNotesDatabase() {return NotesDatabase;}
 
-    protected void prepareNotesForSave()
+    protected void buildSavedNoteView(AppItem note)
     {
-        NotesForSave = new StringBuilder();
-        for (Map.Entry<Integer, Note> i : NotesDatabase.entrySet())
-        {
-            if (i.getValue() instanceof CheckList) {
-                NotesForSave.append(((CheckList) i.getValue()).getName());
-                NotesForSave.append("!%!");
+        Button view = new Button(NotesManager.getInstance().getMainActivity().getNotesLayout().getContext());
+        ImageView icon = new ImageView(NotesManager.getInstance().getMainActivity().getNotesLayout().getContext());
 
-                for (String list_item : ((CheckList) i.getValue()).getListItemsData()) {
-                    NotesForSave.append(list_item);
-                    NotesForSave.append("!%!");
-                }
-                NotesForSave.append("!#!");}
-
-             else if (i.getValue() instanceof Ticket)
+        if(note instanceof CheckList)
+          {
+            icon.setImageResource(R.drawable.checklist);
+            view.setWidth(500);
+            view.setHeight(100);
+            view.setTextSize(16);
+          }
+        else if(note instanceof Ticket)
+          {
+              icon.setImageResource(R.drawable.world);
+              view.setWidth(500);
+              view.setHeight(250);
+              view.setTextSize(12);
+          }
+        else
             {
-                for (Map.Entry<String, String> data : ((Ticket) i.getValue()).getTicketData().entrySet())
-                {
-                  NotesForSave.append(data.getValue());
-                  NotesForSave.append("!*!");
-                }
-                NotesForSave.append("!#!");}
+              icon.setImageResource(R.drawable.notes_);
+              view.setWidth(500);
+              view.setHeight(100);
+              view.setTextSize(16);
+            }
 
-            else{
-                NotesForSave.append(i.getValue().getText());
-                NotesForSave.append("!#!");}
-        }
-        NotesForSave.append(noteId);
-    }
+        view.setBackgroundResource(R.drawable.note_view2);
+        view.getBackground().setAlpha(10);
+        view.setTransformationMethod(null);
+        view.setTypeface(Typeface.create("sans-serif",Typeface.NORMAL));
+        view.setTextColor(Color.parseColor("#8d8d8d"));
+        view.setVisibility(View.INVISIBLE);
+        view.setId(note.getViewId());
+        mainActivity.get().registerForContextMenu(view);
+        view.setOnClickListener(appListener.new NoteViewListener(note));
+        defineNoteViewPosition(view,icon,note);
+        view.setVisibility(View.VISIBLE);
+        icon.setVisibility(View.VISIBLE);
+        view.setText(note.getTextPreview());
 
-    protected void buildSavedNoteView(Note note)
-    {
-        mainActivity.get().registerForContextMenu(note.getSavesNoteView());
-        note.getSavesNoteView().setOnClickListener(appListener.new NoteViewListener(note));
-        defineNoteViewPosition(note);
-        note.getSavesNoteView().setVisibility(View.VISIBLE);
-        note.getIcon().setVisibility(View.VISIBLE);
-        note.getSavesNoteView().setText(note.getTextPreview());
+        mainActivity.get().getNotesLayout().addView(icon);
+        mainActivity.get().getNotesLayout().addView(view);
     }
 
     public void rebuildAllSavedNoteViews(String backUp_data)
     {
         if (backUp_data != null)
         {
-            String notes_data[] = backUp_data.split("!#!");
-            noteId = Integer.parseInt(notes_data[notes_data.length-1]);
-
-            for (int i = 0; i < noteId; i++)
-            {
-                if (notes_data[i].contains("!%!"))
-                {
-                    CheckList current_checklist = new CheckList(i);
-                    String[] list_items_data = notes_data[i].split("!%!");
-                    current_checklist.setName(list_items_data[0]);
-
-                    for (String list_item : list_items_data)
-                    {current_checklist.getListItemsData().add(list_item);}
-
-                    current_checklist.getListItemsData().remove(0);
-                    NotesDatabase.put(i, current_checklist);
-                    buildSavedNoteView(current_checklist);
-                }
-
-                else if(notes_data[i].contains("!*!"))
-                {
-                   Ticket current_ticket = new Ticket(i);
-                   String[] ticket_data = notes_data[i].split("!\\*!");
-
-                   current_ticket.setAllData(ticket_data);
-
-                   NotesDatabase.put(i,current_ticket);
-                   buildSavedNoteView(current_ticket);
-                }
-                else
-                    {
-                    Note current_note = new Note(i);
-                    current_note.setText(notes_data[i]);
-
-                    NotesDatabase.put(i, current_note);
-                    buildSavedNoteView(current_note);
-                }
-            }
+           noteId = NotesDatabase.size();
+           for(Map.Entry<Integer,AppItem> currentNote : NotesDatabase.entrySet())
+           {
+               buildSavedNoteView(currentNote.getValue());
+           }
         }
     }
 
-    protected void defineNoteViewPosition(Note note)
+    protected void defineNoteViewPosition(Button view,ImageView icon, AppItem note)
     {
         RelativeLayout.LayoutParams buttonParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -222,29 +193,31 @@ public class NotesManager
         if (note.getNoteId() < 1) {
             buttonParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         } else {
-            buttonParams.addRule(RelativeLayout.BELOW, (NotesDatabase.get(note.getNoteId() - 1).getSavesNoteView().getId()));
+            buttonParams.addRule(RelativeLayout.BELOW, (note.getViewId()-1));
         }
         buttonParams.setMargins(0, 0, 0, 0);
-        note.getSavesNoteView().setLayoutParams(buttonParams);
+        view.setLayoutParams(buttonParams);
 
-        IconParams.addRule(RelativeLayout.ALIGN_BOTTOM,note.getSavesNoteView().getId());
+        IconParams.addRule(RelativeLayout.ALIGN_BOTTOM,note.getViewId());
         IconParams.setMargins(50,0,0,25);
-        note.getIcon().setLayoutParams(IconParams);
+        icon.setLayoutParams(IconParams);
     }
 
-    protected int changeNoteViewPosition(Note note,int previousId)
+    protected int changeNoteViewPosition(AppItem note,int previousId)
     {
-        RelativeLayout.LayoutParams newParams;
+       Button view = mainActivity.get().findViewById(note.getViewId());
+
+       RelativeLayout.LayoutParams newParams;
         if (note.getNoteId() > 0){
-            newParams = (RelativeLayout.LayoutParams) note.getSavesNoteView().getLayoutParams();
+            newParams = (RelativeLayout.LayoutParams) view.getLayoutParams();
             newParams.addRule(RelativeLayout.BELOW, previousId);
-            previousId = note.getSavesNoteView().getId();
+            previousId = view.getId();
         }
         return previousId;
     }
 
 
-    protected void generateSavedNoteScreen(Note note)
+    protected void generateSavedNoteScreen(AppItem note)
     {
         currentNote = note;
         if (note instanceof CheckList) {mainActivity.get().startActivity(OpenCheckListIntent);}
@@ -253,11 +226,12 @@ public class NotesManager
         else {mainActivity.get().startActivity(OpenNoteIntent);}
     }
 
-    public void deleteNote(int note_Id) {
+    public void deleteNote(int note_Id)
+    {
         mainActivity.get().getNotesLayout().removeAllViews();
         int newKey;
         int newId;
-        Note tmp;
+        AppItem tmp;
 
         for (int i = 0; i < NotesDatabase.size(); i++) {
             if (i >= note_Id + 1) {
@@ -266,8 +240,8 @@ public class NotesManager
                 tmp = NotesDatabase.get(i);
                 NotesDatabase.put(newKey, tmp);
                 NotesDatabase.get(newKey).setNoteId(newId);
-                NotesDatabase.get(newKey).getSavesNoteView().setId(newId + 10);
-                defineNoteViewPosition(NotesDatabase.get(newKey));
+                NotesDatabase.get(newKey).setViewId(newId + 10);
+                buildSavedNoteView(NotesDatabase.get(newKey));
             }
         }
         NotesDatabase.remove(NotesDatabase.size() - 1);
@@ -281,36 +255,29 @@ public class NotesManager
     {
         mainActivity.get().getNotesLayout().removeAllViews();
         int previousId = 10;
-        for (int i = 0; i < NotesDatabase.size(); i++) {
+        for (int i = 0; i < NotesDatabase.size(); i++)
+        {
             switch (filter) {
                 case "Note":
                     if (!(NotesDatabase.get(i) instanceof CheckList) && !(NotesDatabase.get(i) instanceof Ticket)) {
                         buildSavedNoteView(NotesDatabase.get(i));
-                        previousId = changeNoteViewPosition(NotesDatabase.get(i),previousId);
-                        mainActivity.get().getNotesLayout().addView(NotesDatabase.get(i).getIcon());
-                        mainActivity.get().getNotesLayout().addView(NotesDatabase.get(i).getSavesNoteView());
+                        previousId = changeNoteViewPosition((Note)NotesDatabase.get(i),previousId);
                     }break;
 
                 case "List":
                     if (NotesDatabase.get(i) instanceof CheckList) {
                         buildSavedNoteView(NotesDatabase.get(i));
-                        previousId = changeNoteViewPosition(NotesDatabase.get(i),previousId);
-                        mainActivity.get().getNotesLayout().addView(NotesDatabase.get(i).getIcon());
-                        mainActivity.get().getNotesLayout().addView(NotesDatabase.get(i).getSavesNoteView());
+                        previousId = changeNoteViewPosition((CheckList)NotesDatabase.get(i),previousId);
                     }break;
 
                 case "Ticket":
                     if (NotesDatabase.get(i) instanceof Ticket) {
                         buildSavedNoteView(NotesDatabase.get(i));
-                        previousId = changeNoteViewPosition(NotesDatabase.get(i),previousId);
-                        mainActivity.get().getNotesLayout().addView(NotesDatabase.get(i).getIcon());
-                        mainActivity.get().getNotesLayout().addView(NotesDatabase.get(i).getSavesNoteView());
+                        previousId = changeNoteViewPosition((Ticket)NotesDatabase.get(i),previousId);
                     }break;
 
                 case "All":
                     buildSavedNoteView(NotesDatabase.get(i));
-                    mainActivity.get().getNotesLayout().addView(NotesDatabase.get(i).getIcon());
-                    mainActivity.get().getNotesLayout().addView(NotesDatabase.get(i).getSavesNoteView());
                     break;
             }
         }
@@ -322,7 +289,7 @@ public class NotesManager
         int previousId = 10;
         StringBuilder noteContent;
 
-        for (Map.Entry<Integer, Note> i : NotesDatabase.entrySet())
+        for (Map.Entry<Integer, AppItem> i : NotesDatabase.entrySet())
         {
             noteContent = new StringBuilder();
 
@@ -346,15 +313,13 @@ public class NotesManager
             {
                 buildSavedNoteView(i.getValue());
                 previousId = changeNoteViewPosition(i.getValue(),previousId);
-                mainActivity.get().getNotesLayout().addView(i.getValue().getIcon());
-                mainActivity.get().getNotesLayout().addView(i.getValue().getSavesNoteView());
             }
         }
     }
 
     public void removeAllEmptyNotes()
         {
-            for (Map.Entry<Integer, Note> i : NotesDatabase.entrySet())
+            for (Map.Entry<Integer, AppItem> i : NotesDatabase.entrySet())
             {
                 if(i.getValue().isEmpty()){deleteNote(i.getValue().getNoteId());}
             }

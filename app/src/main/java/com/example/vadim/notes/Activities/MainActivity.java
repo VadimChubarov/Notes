@@ -4,12 +4,20 @@ import android.os.Bundle;
 import android.view.*;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import com.example.vadim.notes.AppItems.AppItem;
+import com.example.vadim.notes.AppItems.CheckList;
+import com.example.vadim.notes.AppItems.Note;
+import com.example.vadim.notes.AppItems.Ticket;
 import com.example.vadim.notes.Services.ActionBarManager;
 import com.example.vadim.notes.Services.ContextMenuManager;
 import com.example.vadim.notes.Database.AppDbManager;
 import com.example.vadim.notes.NotesManager;
 import com.example.vadim.notes.R;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity
@@ -108,7 +116,33 @@ public class MainActivity extends AppCompatActivity
     protected void recoverSession()
     {
         BackUpData = appDbManager.loadAppData();
-        notesManager.rebuildAllSavedNoteViews(BackUpData);
+
+        if(BackUpData!=null && !BackUpData.equals(""))
+        {
+            Type itemsNoteType = new TypeToken<Note>() {}.getType();
+            Type itemsCheckListType = new TypeToken<CheckList>() {}.getType();
+            Type itemsTicketType = new TypeToken<Ticket>() {}.getType();
+            Gson gson = new Gson();
+
+            String[] sessionData = BackUpData.split("&");
+
+            for(int i = 0; i < sessionData.length; i++)
+            {
+                Note note = gson.fromJson(sessionData[i],itemsNoteType);
+
+                if(note.getItemType().equals("CheckList"))
+                { CheckList checkList = gson.fromJson(sessionData[i],itemsCheckListType);
+                  notesManager.getNotesDatabase().put(i,checkList);}
+
+                if(note.getItemType().equals("Ticket"))
+                { Ticket ticket = new Gson().fromJson(sessionData[i], itemsTicketType);
+                  notesManager.getNotesDatabase().put(i, ticket);}
+
+                if(note.getItemType().equals("Note"))
+                {notesManager.getNotesDatabase().put(i, note);}
+            }
+            notesManager.rebuildAllSavedNoteViews(BackUpData);
+        }
         if(firstLaunch)
         {
             notesManager.removeAllEmptyNotes();
@@ -118,7 +152,16 @@ public class MainActivity extends AppCompatActivity
 
     public void backUpSession()
     {
-        appDbManager.saveAppData(notesManager.getNotesForSave(), BackUpData);
+        StringBuilder currentSessionData = new StringBuilder();
+        Gson gson = new Gson();
+
+        for (Map.Entry<Integer, AppItem> currentItem : notesManager.getNotesDatabase().entrySet())
+        {
+            String currentItemData =  gson.toJson(currentItem.getValue());
+            currentSessionData.append(currentItemData);
+            currentSessionData.append("&");
+        }
+        appDbManager.saveAppData(currentSessionData.toString(), BackUpData);
         BackUpData = appDbManager.loadAppData();
     }
 

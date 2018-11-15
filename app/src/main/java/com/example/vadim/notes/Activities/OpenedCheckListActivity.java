@@ -56,10 +56,16 @@ public class OpenedCheckListActivity extends Activity
     private void saveCheckListData()
     {
         currentCheckList.setName(checkListHeader.getText().toString());
-        currentCheckList.getSavesNoteView().setText(currentCheckList.getTextPreview());
+
+        Button view = NotesManager.getInstance().getMainActivity().findViewById(currentCheckList.getViewId());
+        view.setText(currentCheckList.getTextPreview());
+
         currentCheckList.getListItemsData().clear();
         for(CheckList.CheckListItem checkListItem : checkListItems)
-        {currentCheckList.getListItemsData().add(checkListItem.getListItemTextView().getText().toString()+checkListItem.getCheckBoxFlag());}
+        {
+            currentCheckList.getListItemsData().add(checkListItem.getListItemTextView().getText().toString()+checkListItem.getCheckBoxFlag());
+            System.out.println(checkListItem.getListItemTextView().getText().toString()+checkListItem.getCheckBoxFlag());
+        }
     }
 
     private void buildAllComponents()

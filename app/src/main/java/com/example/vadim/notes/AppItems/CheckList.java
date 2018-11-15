@@ -5,12 +5,11 @@ import android.graphics.PorterDuff;
 import android.text.InputFilter;
 import android.view.View;
 import android.widget.*;
-import com.example.vadim.notes.R;
 import com.example.vadim.notes.Services.CheckBoxCustomizer;
 
 import java.util.ArrayList;
 
-public class CheckList extends Note
+public class CheckList extends Note implements AppItem
 {
     private String name;
     private ArrayList<String> listItemsData;
@@ -20,7 +19,7 @@ public class CheckList extends Note
       super(checkListId);
       this.listItemsData = new ArrayList<String>();
       this.name = "New Checklist";
-      icon.setImageResource(R.drawable.checklist);
+      this.itemType = "CheckList";
     }
 
     @Override
@@ -59,6 +58,10 @@ public class CheckList extends Note
     public String getName() {return name;}
     public void setName(String name) {this.name = name;}
 
+    @Override
+    public String getItemType() {
+        return itemType;
+    }
 
     public class CheckListItem
     {
@@ -106,5 +109,6 @@ public class CheckList extends Note
         public int getCheckBoxFlag() {return checkBoxFlag;}
 
         public void setCheckBoxFlag(int checkBoxFlag) {this.checkBoxFlag = checkBoxFlag;}
+
     }
 }

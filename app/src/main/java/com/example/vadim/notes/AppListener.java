@@ -1,5 +1,6 @@
 package com.example.vadim.notes;
 import android.view.View;
+import com.example.vadim.notes.AppItems.AppItem;
 import com.example.vadim.notes.AppItems.Note;
 import com.example.vadim.notes.Services.AlertManager;
 
@@ -32,9 +33,9 @@ public class AppListener  implements View.OnClickListener
 
     public class NoteViewListener implements View.OnClickListener
     {
-        private Note note;
+        private AppItem note;
 
-        public NoteViewListener(Note note)
+        public NoteViewListener(AppItem note)
         {
             this.note = note;
         }

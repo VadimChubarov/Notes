@@ -77,7 +77,8 @@ public class OpenTicketActivity extends Activity
     {
         super.onDestroy();
 
-        currentTicket.getSavesNoteView().setText(currentTicket.getTextPreview());
+        Button view = NotesManager.getInstance().getMainActivity().findViewById(currentTicket.getViewId());
+        view.setText(currentTicket.getTextPreview());
 
         if(PdfParser.getRunningTask()!= null
                 && PdfParser.getRunningTask().isRunning())
